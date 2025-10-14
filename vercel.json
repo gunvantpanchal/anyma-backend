@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/company/cover/(.*)",
+      "dest": "/public/company/$1"
+    },
+    {
+      "src": "/company/profile/(.*)",
+      "dest": "/public/company/$1"
+    },
+    {
+      "src": "/profile/pic/(.*)",
+      "dest": "/public/profile/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.js"
+    }
+  ]
+}
