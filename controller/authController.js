@@ -66,18 +66,48 @@ const resendEmailToken=async(req,res)=>{
 
 const login = async (req, res) => {
   try {
-    const user = await User.findOne({ "account.email": req.body.email }); 
+    let user;
+    let token;
+
+    // Check if token is provided for token-based authentication
+    if (req.body.token) {
+      try {
+        const decoded = jwt.verify(req.body.token, "yourSecretKey");
+        user = await User.findById(decoded.id);
+        
+        if (!user) {
+          return res.status(404).json({ message: "User not found." });
+        }
+
+        // Generate a new token
+        token = jwt.sign({ id: user._id }, "yourSecretKey", {
+          expiresIn: "3h",
+        });
+
+        return res.status(200).json({ user, token });
+      } catch (err) {
+        return res.status(401).json({ message: "Invalid or expired token." });
+      }
+    }
+
+    // Email/Password authentication
+    if (!req.body.email || !req.body.password) {
+      return res.status(400).json({ message: "Email and password are required." });
+    }
+
+    user = await User.findOne({ "account.email": req.body.email }); 
     if (!user) {
       return res
         .status(404)
         .json({ message: "Your account does not exist. Please sign up." });
     }
+    
     const isMatched = await user.comparePassword(req.body.password);
     if (!isMatched) {
       return res.status(403).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign({ id: user._id }, "yourSecretKey", {
+    token = jwt.sign({ id: user._id }, "yourSecretKey", {
       expiresIn: "3h",
     });
 
@@ -89,6 +119,7 @@ const login = async (req, res) => {
       .json({ message: "Something went wrong. Please try again later." });
   }
 };
+
 const logout = (req, res) => {
   req.logout();
   res.redirect("/");
