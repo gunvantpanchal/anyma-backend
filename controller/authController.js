@@ -114,7 +114,11 @@ const login = async (req, res) => {
     // Check if request origin is from anyma.capital
     const origin = req.get('origin') || req.get('referer');
     if (origin && origin.includes('anyma.capital')) {
-      return res.redirect(`https://app.anyma.capital?token=${token}`);
+      return res.status(200).json({ 
+        user, 
+        token,
+        redirect: `https://app.anyma.capital?token=${token}`
+      });
     }
 
     res.status(200).json({ user, token });
