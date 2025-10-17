@@ -1,5 +1,7 @@
 const Company = require("../model/company");
 const path = require('path');
+const fs = require('fs');
+const isServerless = !!(process.env.VERCEL || process.env.NOW || process.env.IS_SERVERLESS);
 const Deal = require("../model/deal");
 
 exports.createCompany=async(req,res)=>{
@@ -235,15 +237,19 @@ exports.deleteUpdateDoc = async (req, res) => {
       const documentToDelete = company.update[docIndex];
   
       if (documentToDelete.updateDoc) {
-        const filePath = path.join(__dirname, '..', 'public', documentToDelete.updateDoc); 
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.error('Error deleting file:', err);
-            return res.status(500).json({ message: "Failed to delete the document file." });
-          } else {
-            console.log('File deleted:', filePath);
-          }
-        });
+        const filePath = path.join(__dirname, '..', 'public', documentToDelete.updateDoc);
+        if (isServerless) {
+          console.warn('Running in serverless/read-only environment - skipping file deletion for', filePath);
+        } else {
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error('Error deleting file:', err);
+              return res.status(500).json({ message: "Failed to delete the document file." });
+            } else {
+              console.log('File deleted:', filePath);
+            }
+          });
+        }
       }
   
       company.update.splice(docIndex, 1);
@@ -294,15 +300,19 @@ exports.deleteInvestDoc = async (req, res) => {
       const documentToDelete = company.investDoc[docIndex];
   
       if (documentToDelete.investDoc) {
-        const filePath = path.join(__dirname, '..', 'public', documentToDelete.investDoc); 
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.error('Error deleting file:', err);
-            return res.status(500).json({ message: "Failed to delete the document file." });
-          } else {
-            console.log('File deleted:', filePath);
-          }
-        });
+        const filePath = path.join(__dirname, '..', 'public', documentToDelete.investDoc);
+        if (isServerless) {
+          console.warn('Running in serverless/read-only environment - skipping file deletion for', filePath);
+        } else {
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error('Error deleting file:', err);
+              return res.status(500).json({ message: "Failed to delete the document file." });
+            } else {
+              console.log('File deleted:', filePath);
+            }
+          });
+        }
       }
   
       company.investDoc.splice(docIndex, 1);
@@ -320,11 +330,15 @@ exports.deleteInvestDoc = async (req, res) => {
       const fileName = req.params.fileName;
       const fileDirectory = path.join(__dirname, '../public/company'); 
       const filePath = path.join(fileDirectory, fileName);
-      res.download(filePath, (err) => {
-        if (err) {
-          return res.status(404).send({ message: "File not found!" });
-        }
-      });
+      if (fs.existsSync(filePath)) {
+        res.download(filePath, (err) => {
+          if (err) {
+            return res.status(404).send({ message: "File not found!" });
+          }
+        });
+      } else {
+        return res.status(404).send({ message: "File not found!" });
+      }
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Something went wrong!" });

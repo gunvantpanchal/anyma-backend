@@ -1,13 +1,25 @@
 const multer = require("multer");
+/**
+ * Use disk storage by default. When running on a serverless/read-only
+ * environment (Vercel, Now, etc.) we switch to memoryStorage to avoid
+ * writing files to the read-only `/public` folder which causes EROFS.
+ *
+ * If you deploy to a serverless platform you should persist files to
+ * external storage (S3, Cloudinary, Vercel Blob) using the buffers
+ * available on req.files when memoryStorage is enabled.
+ */
 const uploadMuiltiFieldFiles = (destination) => {
-  const storage = multer.diskStorage({
-    destination: (req, res, cb) => {
-      cb(null, destination);
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    },
-  });
+  const isServerless = !!(process.env.VERCEL || process.env.NOW || process.env.IS_SERVERLESS);
+  const storage = isServerless
+    ? multer.memoryStorage()
+    : multer.diskStorage({
+        destination: (req, res, cb) => {
+          cb(null, destination);
+        },
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      });
   const fileFilter = (req, file, cb) => {
     if (
       file.mimetype === "image/svg" ||

@@ -1,13 +1,20 @@
 const multer = require("multer");
+/**
+ * Switch to memoryStorage when running in serverless/read-only envs
+ * (VERCEL, NOW). Persist files externally in those environments.
+ */
 const uploadFile = (destination) => {
-  const storage = multer.diskStorage({
-    destination: (req, res, cb) => {
-      cb(null, destination);
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    },
-  });
+  const isServerless = !!(process.env.VERCEL || process.env.NOW || process.env.IS_SERVERLESS);
+  const storage = isServerless
+    ? multer.memoryStorage()
+    : multer.diskStorage({
+        destination: (req, res, cb) => {
+          cb(null, destination);
+        },
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      });
   const fileFilter = (req, file, cb) => {
     console.log(file);
     if (
