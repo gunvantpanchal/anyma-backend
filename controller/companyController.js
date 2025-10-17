@@ -12,10 +12,10 @@ exports.createCompany=async(req,res)=>{
         }
               if (req.files) {
                 if (req.files.cover && req.files.cover[0]) {
-                  req.body.cover = "/company/cover/" + req.files.cover[0].originalname;
+                  req.body.cover = "https://api.anyma.capital/company/cover/" + req.files.cover[0].originalname;
                 }
                 if (req.files.profile && req.files.profile[0]) {
-                  req.body.profile = "/company/profile/" + req.files.profile[0].originalname;
+                  req.body.profile = "https://api.anyma.capital/company/profile/" + req.files.profile[0].originalname;
                 }
               
                 if (!req.body.investDoc) {
@@ -26,7 +26,7 @@ exports.createCompany=async(req,res)=>{
                 if (req.files.update && req.files.update.length > 0) {
                   req.body.update = req.files.update.map((file, index) => ({
                     ...file,
-                    updatedoc: "/company/update/" + file.originalname,
+                    updatedoc: "https://api.anyma.capital/company/update/" + file.originalname,
                     date: Date.now(),
                     id:index
                   }));
@@ -35,7 +35,7 @@ exports.createCompany=async(req,res)=>{
                 if (req.files.investDoc && req.files.investDoc.length > 0) {
                   req.body.investDoc = req.files.investDoc.map((file, index) => ({
                     ...file,
-                    updatedoc: "/company/investDoc/" + file.originalname,
+                    updatedoc: "https://api.anyma.capital/company/investDoc/" + file.originalname,
                     date: Date.now(),
                     id:index
                   }));
