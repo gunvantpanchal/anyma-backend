@@ -6,7 +6,7 @@ const axios = require('axios');
  */
 const sendEmail = async (message, email, subject) => {
   try {
-    // Step 1: Get access token from Microsoft Identity Platform
+    // Step 1: Get access token
     const tokenResponse = await axios.post(
       `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`,
       new URLSearchParams({
@@ -22,7 +22,7 @@ const sendEmail = async (message, email, subject) => {
 
     const accessToken = tokenResponse.data.access_token;
 
-    // Step 2: Send email using Microsoft Graph API
+    // Step 2: Send email using Graph API
     const emailData = {
       message: {
         subject: subject,
@@ -36,12 +36,7 @@ const sendEmail = async (message, email, subject) => {
               address: email
             }
           }
-        ],
-        from: {
-          emailAddress: {
-            address: process.env.EMAIL
-          }
-        }
+        ]
       },
       saveToSentItems: 'true'
     };
