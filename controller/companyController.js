@@ -50,7 +50,7 @@ exports.createCompany=async(req,res)=>{
         res.status(201).json("company addedd successfully");
     } catch (error) {
        console.log(error);
-       res.status(500).json({messsage:"something went wrong!"});
+       res.status(500).json({messsage: error?._message || "something went wrong!"});
     }
 }
 
