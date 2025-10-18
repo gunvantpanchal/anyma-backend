@@ -185,7 +185,7 @@ const updateUserDetails = async (req, res) => {
       }
     
     if (req.files&&req?.files?.profile) {
-      req.body.personal.profile = "/profile/pic/" + req?.files?.profile[0]?.originalname;
+      req.body.personal.profile = "https://api.anyma.capital/profile/pic/" + req?.files?.profile[0]?.originalname;
     }
     // req.body.account.role='ADMIN';
    
@@ -214,7 +214,7 @@ const updateUserDetails = async (req, res) => {
     res.status(200).json("User update successfully");
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error?._message || "Internal server error" });
   }
 };
 
@@ -246,7 +246,7 @@ const sendOtp = async (req, res) => {
     res.status(200).json("OTP has been sent to your email ID");
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error._message || "Internal server error" });
   }
 };
 const verifyOTP=async(req,res)=>{
