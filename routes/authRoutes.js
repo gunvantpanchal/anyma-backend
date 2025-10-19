@@ -14,13 +14,13 @@ const {
   resendEmailToken,
   sendEmailInvitation,
 } = require("../controller/authController");
-const uploadMuiltiFieldFiles = require("../middlewares/uploadMultifieldFiles");
+const memoryUpload = require("../middlewares/memoryUpload")();
 
 const AuthRoutes = require("express").Router();
 AuthRoutes.post("/register", register);
 AuthRoutes.post("/", register);
 AuthRoutes.post("/login", login);
-AuthRoutes.put("/update/:id",uploadMuiltiFieldFiles("public/profile"),  updateUserDetails);
+AuthRoutes.put("/update/:id", memoryUpload, updateUserDetails);
 AuthRoutes.delete("/delete/:id", deleteUser);
 AuthRoutes.get("/users/role/:role", getAllUserByRoles);
 AuthRoutes.get("/users", getAllUsers);
