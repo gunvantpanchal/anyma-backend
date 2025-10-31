@@ -130,10 +130,6 @@ exports.updateCompany = async (req, res) => {
         }
       }
 
-      if (!req.body.investDoc) {
-        req.body.investDoc = [];
-      }
-
       if (req.files.update && req.files.update.length > 0) {
         req.body.update = [];
         for (let i = 0; i < req.files.update.length; i++) {

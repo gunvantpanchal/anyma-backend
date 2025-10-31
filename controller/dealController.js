@@ -96,6 +96,9 @@ exports.getAllDealsWithUserIdAndCompany=async(req,res)=>{
             { 
                 $match: {  "investors.investerId": investorId }
             },
+            {
+                $sort: { investedDate: -1 }
+            },
             { 
                 $group: { 
                     _id: "$companyId", 
