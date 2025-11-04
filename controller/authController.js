@@ -370,9 +370,9 @@ const sendEmailInvitation = async (req, res) => {
       return res.status(400).json({ message: "Invalid member data" });
     }
 
-      if (memberAccount.isInvitationSended) {
-      return res.status(400).json({ message: "Invitation already sended to this member" });
-    }
+    //   if (memberAccount.isInvitationSended) {
+    //   return res.status(400).json({ message: "Invitation already sended to this member" });
+    // }
 
     const emailToken = await bcrypt.hash(memberAccount.email, 10);
     const expiration = Date.now() + 5 * 60 * 1000; 
