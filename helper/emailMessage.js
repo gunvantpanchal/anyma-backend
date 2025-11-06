@@ -463,18 +463,18 @@ exports.MemberMessage = (member) => {
 				<!--[if mso]>
 				<td valign="top" width="600" style="width:600px;">
 				<![endif]-->
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;float: left;" width="100%" class="mcnTextContentContainer">
+                                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;float: left;" width="100%" class="mcnTextContentContainer">
                     <tbody><tr>
                         
                         <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;color: #FFFFFF;text-align: center;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;font-family: Helvetica;font-size: 12px;line-height: 150%;">
                         
-                            <div style="text-align: left;"><span style="font-size:13px">Dear ${member.personal.firstName || "Test First Name"} ,<br>
+                            <div style="text-align: left;"><span style="font-size:13px">Dear ${member.personal.firstName || "&lt;&lt; Test First Name &gt;&gt;"},<br>
 <br>
-We are delighted to welcome you to Anyma’s investor dashboard.<br>
+We are delighted to welcome you to Anyma's investor dashboard.<br>
 <br>
 Through this platform, you will have a dedicated space to follow your portfolio of investments with Anyma, monitor performance, and access a centralised hub with the latest company news and related documents.<br>
 <br>
-To get started, please click the link below to create your profile. You will be asked a few short questions about your investment approach and preferences, and you will then set up your account with a personal password.<br>
+To get started, please click the link below to create your profile. You will be asked a few short questions about your investment approach and preferences, and then set up your account with a personal password. For the best experience, please access the platform from desktop. Once your account is created, you can log in at any time directly from the <a href="https://anyma.capital/login" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #f14625;font-weight: normal;text-decoration: underline;">Anyma website</a>.<br>
 <br>
 We also invite you to review the <a href="${process.env.terms}" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #f14625;font-weight: normal;text-decoration: underline;">Terms &amp; Conditions</a>, which explain our valuation framework and how investments are reported.</span><br>
 &nbsp;</div>
@@ -588,7 +588,7 @@ Anyma</span>
 <br>
 Anyma Capital Ltd is registered in England and Wales under Company Number 13080797 and with the FCA as an Appointed Representative with FRN 978422. Anyma Capital Ltd is an Appointed Representative of Finex LLP which is authorised and regulated in the UK by the Financial Conduct Authority (“FCA”) with firm reference number 507537.<br>
 <br>
-<a href="https://capital.us18.list-manage.com/about?u=3eac7f8b07897154123f7675a&id=3ce7b9489d&e=[UNIQID]&c=8c77e8cf10" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;"><em>Why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://capital.us18.list-manage.com/unsubscribe?u=3eac7f8b07897154123f7675a&id=3ce7b9489d&t=b&e=[UNIQID]&c=e245bd42c2" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;">Unsubscribe</a>&nbsp;  
+<a href="https://capital.us18.list-manage.com/about?u=3eac7f8b07897154123f7675a&id=3ce7b9489d&e=[UNIQID]&c=8c77e8cf10" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;"><em>Why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://capital.us18.list-manage.com/unsubscribe?u=3eac7f8b07897154123f7675a&id=3ce7b9489d&t=b&e=[UNIQID]&c=dc6f9ebac0" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #ffffff;font-weight: normal;text-decoration: underline;">Unsubscribe</a>&nbsp;  
                         </td>
                     </tr>
                 </tbody></table>
