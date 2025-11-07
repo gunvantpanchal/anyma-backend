@@ -207,7 +207,7 @@ const updateUserDetails = async (req, res) => {
           return res.json({message:"Password not matched !"});
         }
         // Hash the password before saving (pre-save hook will also handle this)
-        user.account.password = await bcrypt.hash(req.body.account.password, 10);
+        user.account.password = req.body.account.password
         await  user.save();
       }
 
@@ -290,7 +290,7 @@ const setPassword=async(req,res)=>{
     }
     if(user.forget.otp){
       // Hash the password before saving
-      user.account.password = await bcrypt.hash(req.body.newPassword, 10);
+      user.account.password = req.body.newPassword
     }
  const savedpassword=   await user.save();
  if(!savedpassword){
