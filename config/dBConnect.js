@@ -4,7 +4,7 @@ dotenv.config();
 const URL = "mongodb+srv://alessandro:RPrxd9ZCKyUt0EKy@anyma.ze4sr.mongodb.net/Anyma";
 const Connection = async () => {
   try {
-    await mongoose.connect(process.env.DB_URL || URL);
+    await mongoose.connect(process.env.MONGODB_URI || URL);
     console.log("Database connected successfully - test");
   } catch (error) {
     console.log(error.message);
