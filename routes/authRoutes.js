@@ -13,6 +13,8 @@ const {
   getUserByEmail,
   resendEmailToken,
   sendEmailInvitation,
+  forgotPasswordLink,
+  resetPasswordByToken,
 } = require("../controller/authController");
 const memoryUpload = require("../middlewares/memoryUpload")();
 
@@ -32,5 +34,7 @@ AuthRoutes.post("/forget", sendOtp);
 AuthRoutes.post("/otp-verification", verifyOTP);
 AuthRoutes.post("/reset-password", setPassword);
 AuthRoutes.post("/send-email/:id", sendEmailInvitation);
+AuthRoutes.post("/forgot-password", forgotPasswordLink);
+AuthRoutes.post("/reset-password/:token", resetPasswordByToken);
 
 module.exports = AuthRoutes;
