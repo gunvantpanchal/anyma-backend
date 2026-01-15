@@ -7,6 +7,12 @@ const { OtpGenerator } = require("../helper/otpGenrator");
 const bcrypt = require("bcryptjs");
 const Deal = require("../model/deal");
 const crypto = require("crypto");
+let firebaseStorage;
+try {
+  firebaseStorage = require("../utils/firebaseStorage");
+} catch (e) {
+  firebaseStorage = null;
+}
 
 const register = async (req, res) => {
   try {
@@ -265,8 +271,19 @@ const updateUserDetails = async (req, res) => {
         req.body.personal=JSON.parse(personal);
       }
     
-    if (req.files&&req?.files?.profile) {
-      req.body.personal.profile = "https://api.anyma.capital/profile/pic/" + req?.files?.profile[0]?.originalname;
+    if (req.files && req?.files?.profile && req.files.profile[0]) {
+      const pf = req.files.profile[0];
+      if (firebaseStorage && pf.buffer) {
+        const uploaded = await firebaseStorage.uploadBufferToFirebase(pf.buffer, pf.originalname, pf.mimetype);
+        req.body.personal.profile = uploaded.url;
+      } else if (pf.url) {
+        req.body.personal.profile = pf.url;
+      } else if (pf.originalname) {
+        // fallback to static hosting path (disk-storage case)
+        req.body.personal.profile = "https://api.anyma.capital/profile/pic/" + pf.originalname;
+      } else {
+        return res.status(400).json({ message: 'Profile upload failed' });
+      }
     }
     // req.body.account.role='ADMIN';
    
