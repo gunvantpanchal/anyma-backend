@@ -92,7 +92,7 @@ const forgotPasswordLink = async (req, res) => {
     user.forget.resetTokenExpiration = expiration;
     await user.save();
 
-    const baseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const baseUrl = process.env.FRONTEND_URL || "https://app.anyma.capital";
     const link = `${baseUrl}/reset-password/${token}`;
 
     const html = `
