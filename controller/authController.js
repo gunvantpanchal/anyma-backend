@@ -6,6 +6,7 @@ const { message, MemberMessage } = require("../helper/emailMessage");
 const { OtpGenerator } = require("../helper/otpGenrator");
 const bcrypt = require("bcryptjs");
 const Deal = require("../model/deal");
+const crypto = require("crypto");
 let firebaseStorage;
 try {
   firebaseStorage = require("../utils/firebaseStorage");
@@ -19,7 +20,7 @@ const register = async (req, res) => {
     if (!req.body.account || !req.body.account.email) {
       return res.status(400).json({ message: "Email is required." });
     }
-
+    
     const { email, password, cnfPassword } = req.body.account;
 
     const user = await User.findOne({ 'account.email': email });
@@ -69,6 +70,86 @@ const resendEmailToken=async(req,res)=>{
     return res.status(500).json({ message: error.message });
   }
 }
+
+
+// Forgot password via email link (token-based)
+const forgotPasswordLink = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+    const user = await User.findOne({ 'account.email': email });
+
+    if (!user) {
+      return res.status(200).json("If an account exists for this email, a reset link has been sent.");
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiration = Date.now() + 15 * 60 * 1000;
+
+    user.forget.resetToken = token;
+    user.forget.resetTokenExpiration = expiration;
+    await user.save();
+
+    const baseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const link = `${baseUrl}/reset-password/${token}`;
+
+    const html = `
+      <p>You requested a password reset for your Anyma account.</p>
+      <p>Click the link below to set a new password. This link expires in 15 minutes.</p>
+      <p><a href="${link}">Reset your password</a></p>
+      <p>If you did not request this, please ignore this email.</p>
+    `;
+
+    try {
+      await sendEmail(html, email, "Reset your Anyma password");
+    } catch (e) {
+      console.log("sendEmail failed (suppressing):", e?.message || e);
+
+    }
+    return res.status(200).json("If an account exists for this email, a reset link has been sent.");
+  } catch (error) {
+    console.log(error);
+   
+    return res.status(200).json("If an account exists for this email, a reset link has been sent.");
+  }
+};
+
+const resetPasswordByToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ message: "Invalid request" });
+    }
+    if (!password || !confirmPassword) {
+      return res.status(400).json({ message: "Password and confirm password are required" });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const user = await User.findOne({ 'forget.resetToken': token, 'forget.resetTokenExpiration': { $gt: Date.now() } });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired link" });
+    }
+
+    user.account.password = password; 
+    user.forget.resetToken = undefined;
+    user.forget.resetTokenExpiration = undefined;
+    user.forget.otp = "";
+    user.forget.otpVerify = false;
+    user.forget.otpExpiration = new Date();
+    await user.save();
+
+    return res.status(200).json("Password reset successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 const login = async (req, res) => {
   try {
@@ -433,5 +514,7 @@ module.exports = {
   deleteUser,
   getUserByEmail,
   resendEmailToken,
-  sendEmailInvitation
+  sendEmailInvitation,
+  forgotPasswordLink,
+  resetPasswordByToken
 };
