@@ -92,14 +92,97 @@ const forgotPasswordLink = async (req, res) => {
     user.forget.resetTokenExpiration = expiration;
     await user.save();
 
-    const baseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const baseUrl = process.env.FRONTEND_URL || "https://app.anyma.capital";
     const link = `${baseUrl}/reset-password/${token}`;
 
     const html = `
-      <p>You requested a password reset for your Anyma account.</p>
-      <p>Click the link below to set a new password. This link expires in 15 minutes.</p>
-      <p><a href="${link}">Reset your password</a></p>
-      <p>If you did not request this, please ignore this email.</p>
+    <!doctype html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Reset your Anyma password</title>
+        <style type="text/css">
+          p{margin:10px 0;padding:0}
+          table{border-collapse:collapse}
+          img,a img{border:0;height:auto;outline:none;text-decoration:none}
+          body,#bodyTable,#bodyCell{height:100%;margin:0;padding:0;width:100%}
+          .mcnPreviewText{display:none !important}
+          body,#bodyTable{background-color:#f2f2f2}
+          .templateContainer{max-width:600px !important}
+          /* Header / body / footer colours mirror MemberMessage */
+          #templateHeader{background-color:#222222}
+          #templateBody{background-color:#222222}
+          #templateFooter{background-color:#222222}
+          #templateBody .mcnTextContent{color:#ffffff;font-family:Helvetica;font-size:14px;line-height:150%;text-align:left}
+          #templateBody .mcnTextContent a{color:#f14625;text-decoration:underline}
+          .mcnButtonContentContainer{border-radius:9px;background-color:#F14625}
+          .mcnButtonContent a{color:#ffffff;text-decoration:none;font-weight:bold;display:block;padding:12px 18px}
+          @media only screen and (min-width:768px){.templateContainer{width:600px !important}}
+        </style>
+      </head>
+      <body style="height:100%;margin:0;padding:0;width:100%;background-color:#f2f2f2;">
+        <center>
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" id="bodyTable">
+            <tr>
+              <td align="center" valign="top" id="bodyCell">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
+                  <tr>
+                    <td valign="top" id="templateHeader" style="background:#222222;padding:9px 0;text-align:center;">
+                      <img alt="Anyma" src="https://mcusercontent.com/3eac7f8b07897154123f7675a/images/ad69e9c3-382b-866f-57a3-a8add5db4f6b.jpg" style="max-width:220px;height:auto;display:inline-block;" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td valign="top" id="templateBody" style="background:#222222;padding:18px 0;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                          <td class="mcnTextContent" style="padding:0 18px;color:#ffffff;">
+                            <p style="margin-top:0;font-size:15px;">Hello,</p>
+                            <p style="font-size:14px;">You recently requested to reset the password for your Anyma account. To set a new password, click the button below. This link will expire in 15 minutes.</p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 18px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock">
+                              <tr>
+                                <td align="left" style="padding-top:16px;padding-right:18px;padding-bottom:18px;padding-left:18px;">
+                                  <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer">
+                                    <tr>
+                                      <td align="center" valign="middle" class="mcnButtonContent">
+                                        <a title="Reset password" href="${link}" target="_blank" style="color:#ffffff;">Reset your password</a>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="mcnTextContent" style="padding:0 18px;color:#ffffff;">
+                            <p style="font-size:13px;color:#d1d1d1;">If the button above does not work, copy and paste the following URL into your browser:</p>
+                            <p style="word-break:break-all;font-size:13px;color:#f14625;"><a href="${link}" target="_blank" style="color:#f14625;text-decoration:underline;">${link}</a></p>
+                            <p style="font-size:13px;color:#d1d1d1;">If you did not request this change, you can safely ignore this email. No changes will be made to your account.</p>
+                            <p style="font-size:13px;color:#ffffff;">Kind regards,<br/>Anyma</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td valign="top" id="templateFooter" style="background:#222222;padding:12px 18px;text-align:center;color:#ffffff;font-size:11px;">
+                      Copyright (C) 2022 Anyma Capital Ltd. All rights reserved.<br/>
+                      1 Doughty Street, London, England, WC1N 2PH | members@anyma.capital
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </center>
+      </body>
+    </html>
     `;
 
     try {
