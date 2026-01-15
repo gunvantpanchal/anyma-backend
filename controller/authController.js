@@ -161,10 +161,10 @@ const forgotPasswordLink = async (req, res) => {
                         </tr>
                         <tr>
                           <td class="mcnTextContent" style="padding:0 18px;color:#ffffff;">
-                            <p style="font-size:13px;color:#d1d1d1;">If the button above does not work, copy and paste the following URL into your browser:</p>
-                            <p style="word-break:break-all;font-size:13px;color:#f14625;"><a href="${link}" target="_blank" style="color:#f14625;text-decoration:underline;">${link}</a></p>
-                            <p style="font-size:13px;color:#d1d1d1;">If you did not request this change, you can safely ignore this email. No changes will be made to your account.</p>
-                            <p style="font-size:13px;color:#ffffff;">Kind regards,<br/>Anyma</p>
+                            <p style="font-size:14px;color:#ffffff;">If the button above does not work, copy and paste the following URL into your browser:</p>
+                            <p style="word-break:break-all;font-size:14px;color:#f14625;"><a href="${link}" target="_blank" style="color:#f14625;text-decoration:underline;">${link}</a></p>
+                            <p style="font-size:14px;color:#ffffff;">If you did not request this change, you can safely ignore this email. No changes will be made to your account.</p>
+                            <p style="font-size:14px;color:#ffffff;">Kind regards,<br/>Anyma</p>
                           </td>
                         </tr>
                       </table>
